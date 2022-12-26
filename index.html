@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title></title>
+</head>
+<body>
+&lt;?php<br/>
+session_start();<br/>
+error_reporting(0);<br/>
+include(&#39;includes/config.php&#39;);<br/>
+if($_SESSION[&#39;login&#39;]!=&#39;&#39;){<br/>
+$_SESSION[&#39;login&#39;]=&#39;&#39;;<br/>
+}<br/>
+if(isset($_POST[&#39;login&#39;]))<br/>
+{<br/>
+<br/>
+$email=$_POST[&#39;emailid&#39;];<br/>
+$password=md5($_POST[&#39;password&#39;]);<br/>
+$sql =&quot;SELECT EmailId,Password,StudentId,Status FROM tblstudents WHERE EmailId=:email and Password=:password&quot;;<br/>
+$query= $dbh &ndash;&gt; prepare($sql);<br/>
+$query&ndash;&gt; bindParam(&#39;:email&#39;, $email, PDO::PARAM_STR);<br/>
+$query&ndash;&gt; bindParam(&#39;:password&#39;, $password, PDO::PARAM_STR);<br/>
+$query&ndash;&gt; execute();<br/>
+$results=$query&ndash;&gt;fetchAll(PDO::FETCH_OBJ);<br/>
+<br/>
+if($query&ndash;&gt;rowCount() &gt; 0)<br/>
+{<br/>
+ foreach ($results as $result) {<br/>
+ $_SESSION[&#39;stdid&#39;]=$result&ndash;&gt;StudentId;<br/>
+if($result&ndash;&gt;Status==1)<br/>
+{<br/>
+$_SESSION[&#39;login&#39;]=$_POST[&#39;emailid&#39;];<br/>
+echo &quot;&lt;script type=&#39;text/javascript&#39;&gt; document.location =&#39;dashboard.php&#39;; &lt;/script&gt;&quot;;<br/>
+} else {<br/>
+echo &quot;&lt;script&gt;alert(&#39;Your Account Has been blocked .Please contact admin&#39;);&lt;/script&gt;&quot;;<br/>
+<br/>
+}<br/>
+}<br/>
+<br/>
+} <br/>
+<br/>
+else{<br/>
+echo &quot;&lt;script&gt;alert(&#39;Invalid Details&#39;);&lt;/script&gt;&quot;;<br/>
+}<br/>
+}<br/>
+<br/>
+?&gt;<br/>
+&lt;!DOCTYPE html&gt;<br/>
+&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;<br/>
+&lt;head&gt;<br/>
+    &lt;meta charset=&quot;utf&ndash;8&quot; /&gt;<br/>
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device&ndash;width, initial&ndash;scale=1, maximum&ndash;scale=1&quot; /&gt;<br/>
+    &lt;meta name=&quot;description&quot; content=&quot;&quot; /&gt;<br/>
+    &lt;meta name=&quot;author&quot; content=&quot;&quot; /&gt;<br/>
+    &lt;title&gt;Online Library Management System | &lt;/title&gt;<br/>
+    &lt;!&ndash;&ndash; BOOTSTRAP CORE STYLE  &ndash;&ndash;&gt;<br/>
+    &lt;link href=&quot;assets/css/bootstrap.css&quot; rel=&quot;stylesheet&quot; /&gt;<br/>
+    &lt;!&ndash;&ndash; FONT AWESOME STYLE  &ndash;&ndash;&gt;<br/>
+    &lt;link href=&quot;assets/css/font&ndash;awesome.css&quot; rel=&quot;stylesheet&quot; /&gt;<br/>
+    &lt;!&ndash;&ndash; CUSTOM STYLE  &ndash;&ndash;&gt;<br/>
+    &lt;link href=&quot;assets/css/style.css&quot; rel=&quot;stylesheet&quot; /&gt;<br/>
+    &lt;!&ndash;&ndash; GOOGLE FONT &ndash;&ndash;&gt;<br/>
+    &lt;link href=&#39;http://fonts.googleapis.com/css?family=Open+Sans&#39; rel=&#39;stylesheet&#39; type=&#39;text/css&#39; /&gt;<br/>
+<br/>
+&lt;/head&gt;<br/>
+&lt;body&gt;<br/>
+    &lt;!&ndash;&ndash;&ndash;&ndash;&ndash;&ndash;MENU SECTION START&ndash;&ndash;&gt;<br/>
+&lt;?php include(&#39;includes/header.php&#39;);?&gt;<br/>
+&lt;!&ndash;&ndash; MENU SECTION END&ndash;&ndash;&gt;<br/>
+&lt;div class=&quot;content&ndash;wrapper&quot;&gt;<br/>
+&lt;div class=&quot;container&quot;&gt;<br/>
+&lt;!&ndash;&ndash;Slider&ndash;&ndash;&ndash;&ndash;&gt;<br/>
+     &lt;div class=&quot;row&quot;&gt;<br/>
+              &lt;div class=&quot;col&ndash;md&ndash;10 col&ndash;sm&ndash;8 col&ndash;xs&ndash;12 col&ndash;md&ndash;offset&ndash;1&quot;&gt;<br/>
+                    &lt;div id=&quot;carousel&ndash;example&quot; class=&quot;carousel slide slide&ndash;bdr&quot; data&ndash;ride=&quot;carousel&quot; &gt;<br/>
+                    &lt;div class=&quot;carousel&ndash;inner&quot;&gt;<br/>
+                        &lt;div class=&quot;item active&quot;&gt;<br/>
+                            &lt;img src=&quot;assets/img/1.jpg&quot; alt=&quot;&quot; /&gt;<br/>
+                        &lt;/div&gt;<br/>
+                        &lt;div class=&quot;item&quot;&gt;<br/>
+                            &lt;img src=&quot;assets/img/2.jpg&quot; alt=&quot;&quot; /&gt;<br/>
+                        &lt;/div&gt;<br/>
+                        &lt;div class=&quot;item&quot;&gt;<br/>
+                            &lt;img src=&quot;assets/img/3.jpg&quot; alt=&quot;&quot; /&gt; <br/>
+                        &lt;/div&gt;<br/>
+                    &lt;/div&gt;<br/>
+                    &lt;!&ndash;&ndash;INDICATORS&ndash;&ndash;&gt;<br/>
+                     &lt;ol class=&quot;carousel&ndash;indicators&quot;&gt;<br/>
+                        &lt;li data&ndash;target=&quot;#carousel&ndash;example&quot; data&ndash;slide&ndash;to=&quot;0&quot; class=&quot;active&quot;&gt;&lt;/li&gt;<br/>
+                        &lt;li data&ndash;target=&quot;#carousel&ndash;example&quot; data&ndash;slide&ndash;to=&quot;1&quot;&gt;&lt;/li&gt;<br/>
+                        &lt;li data&ndash;target=&quot;#carousel&ndash;example&quot; data&ndash;slide&ndash;to=&quot;2&quot;&gt;&lt;/li&gt;<br/>
+                    &lt;/ol&gt;<br/>
+                    &lt;!&ndash;&ndash;PREVIUS&ndash;NEXT BUTTONS&ndash;&ndash;&gt;<br/>
+                     &lt;a class=&quot;left carousel&ndash;control&quot; href=&quot;#carousel&ndash;example&quot; data&ndash;slide=&quot;prev&quot;&gt;<br/>
+    &lt;span class=&quot;glyphicon glyphicon&ndash;chevron&ndash;left&quot;&gt;&lt;/span&gt;<br/>
+  &lt;/a&gt;<br/>
+  &lt;a class=&quot;right carousel&ndash;control&quot; href=&quot;#carousel&ndash;example&quot; data&ndash;slide=&quot;next&quot;&gt;<br/>
+    &lt;span class=&quot;glyphicon glyphicon&ndash;chevron&ndash;right&quot;&gt;&lt;/span&gt;<br/>
+  &lt;/a&gt;<br/>
+                &lt;/div&gt;<br/>
+              &lt;/div&gt;<br/>
+             &lt;/div&gt;<br/>
+&lt;hr /&gt;<br/>
+<br/>
+<br/>
+<br/>
+&lt;div class=&quot;row pad&ndash;botm&quot;&gt;<br/>
+&lt;div class=&quot;col&ndash;md&ndash;12&quot;&gt;<br/>
+&lt;h4 class=&quot;header&ndash;line&quot;&gt;USER LOGIN FORM&lt;/h4&gt;<br/>
+&lt;/div&gt;<br/>
+&lt;/div&gt;<br/>
+ &lt;a name=&quot;ulogin&quot;&gt;&lt;/a&gt;            <br/>
+&lt;!&ndash;&ndash;LOGIN PANEL START&ndash;&ndash;&gt;           <br/>
+&lt;div class=&quot;row&quot;&gt;<br/>
+&lt;div class=&quot;col&ndash;md&ndash;6 col&ndash;sm&ndash;6 col&ndash;xs&ndash;12 col&ndash;md&ndash;offset&ndash;3&quot; &gt;<br/>
+&lt;div class=&quot;panel panel&ndash;info&quot;&gt;<br/>
+&lt;div class=&quot;panel&ndash;heading&quot;&gt;<br/>
+ LOGIN FORM<br/>
+&lt;/div&gt;<br/>
+&lt;div class=&quot;panel&ndash;body&quot;&gt;<br/>
+&lt;form role=&quot;form&quot; method=&quot;post&quot;&gt;<br/>
+<br/>
+&lt;div class=&quot;form&ndash;group&quot;&gt;<br/>
+&lt;label&gt;Enter Email id&lt;/label&gt;<br/>
+&lt;input class=&quot;form&ndash;control&quot; type=&quot;text&quot; name=&quot;emailid&quot; required autocomplete=&quot;off&quot; /&gt;<br/>
+&lt;/div&gt;<br/>
+&lt;div class=&quot;form&ndash;group&quot;&gt;<br/>
+&lt;label&gt;Password&lt;/label&gt;<br/>
+&lt;input class=&quot;form&ndash;control&quot; type=&quot;password&quot; name=&quot;password&quot; required autocomplete=&quot;off&quot;  /&gt;<br/>
+&lt;p class=&quot;help&ndash;block&quot;&gt;&lt;a href=&quot;user&ndash;forgot&ndash;password.php&quot;&gt;Forgot Password&lt;/a&gt;&lt;/p&gt;<br/>
+&lt;/div&gt;<br/>
+<br/>
+<br/>
+<br/>
+ &lt;button type=&quot;submit&quot; name=&quot;login&quot; class=&quot;btn btn&ndash;info&quot;&gt;LOGIN &lt;/button&gt; | &lt;a href=&quot;signup.php&quot;&gt;Not Register Yet&lt;/a&gt;<br/>
+&lt;/form&gt;<br/>
+ &lt;/div&gt;<br/>
+&lt;/div&gt;<br/>
+&lt;/div&gt;<br/>
+&lt;/div&gt;  <br/>
+&lt;!&ndash;&ndash;&ndash;LOGIN PABNEL END&ndash;&ndash;&gt;            <br/>
+             <br/>
+ <br/>
+    &lt;/div&gt;<br/>
+    &lt;/div&gt;<br/>
+     &lt;!&ndash;&ndash; CONTENT&ndash;WRAPPER SECTION END&ndash;&ndash;&gt;<br/>
+ &lt;?php include(&#39;includes/footer.php&#39;);?&gt;<br/>
+      &lt;!&ndash;&ndash; FOOTER SECTION END&ndash;&ndash;&gt;<br/>
+    &lt;script src=&quot;assets/js/jquery&ndash;1.10.2.js&quot;&gt;&lt;/script&gt;<br/>
+    &lt;!&ndash;&ndash; BOOTSTRAP SCRIPTS  &ndash;&ndash;&gt;<br/>
+    &lt;script src=&quot;assets/js/bootstrap.js&quot;&gt;&lt;/script&gt;<br/>
+      &lt;!&ndash;&ndash; CUSTOM SCRIPTS  &ndash;&ndash;&gt;<br/>
+    &lt;script src=&quot;assets/js/custom.js&quot;&gt;&lt;/script&gt;<br/>
+<br/>
+&lt;/body&gt;<br/>
+&lt;/html&gt;</body></html>

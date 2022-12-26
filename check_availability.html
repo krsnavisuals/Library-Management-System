@@ -1,0 +1,36 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title></title>
+</head>
+<body>
+&lt;?php <br/>
+require_once(&quot;includes/config.php&quot;);<br/>
+// code user email availablity<br/>
+if(!empty($_POST[&quot;emailid&quot;])) {<br/>
+&nbsp;&nbsp;&nbsp;$email= $_POST[&quot;emailid&quot;];<br/>
+&nbsp;&nbsp;&nbsp;if (filter_var($email, FILTER_VALIDATE_EMAIL)===false) {<br/>
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;error : You did not enter a valid email.&quot;;<br/>
+&nbsp;&nbsp;&nbsp;}<br/>
+&nbsp;&nbsp;&nbsp;else {<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$sql =&quot;SELECT EmailId FROM tblstudents WHERE EmailId=:email&quot;;<br/>
+$query= $dbh &ndash;&gt; prepare($sql);<br/>
+$query&ndash;&gt; bindParam(&#39;:email&#39;, $email, PDO::PARAM_STR);<br/>
+$query&ndash;&gt; execute();<br/>
+$results = $query &ndash;&gt; fetchAll(PDO::FETCH_OBJ);<br/>
+$cnt=1;<br/>
+if($query &ndash;&gt; rowCount() &gt; 0)<br/>
+{<br/>
+echo &quot;&lt;span style=&#39;color:red&#39;&gt; Email already exists .&lt;/span&gt;&quot;;<br/>
+ echo &quot;&lt;script&gt;$(&#39;#submit&#39;).prop(&#39;disabled&#39;,true);&lt;/script&gt;&quot;;<br/>
+} else{<br/>
+&nbsp;&nbsp;&nbsp;<br/>
+&nbsp;&nbsp;&nbsp;echo &quot;&lt;span style=&#39;color:green&#39;&gt; Email available for Registration .&lt;/span&gt;&quot;;<br/>
+ echo &quot;&lt;script&gt;$(&#39;#submit&#39;).prop(&#39;disabled&#39;,false);&lt;/script&gt;&quot;;<br/>
+}<br/>
+}<br/>
+}<br/>
+<br/>
+<br/>
+?&gt;</body></html>
